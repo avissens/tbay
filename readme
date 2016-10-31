@@ -1,0 +1,7 @@
+Along the way you will be building the database layer for the world's second most popular auction site, TBay. You will create users, have them put items up for auction, and place bids to try to win the items which are up for sale.
+
+Goals
+
+Use SQLAlchemy to create tables and rows
+Query a database using SQLALchemy
+Create relationships between models
