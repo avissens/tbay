@@ -15,7 +15,7 @@ from sqlalchemy.orm import relationship
 
 #creating a user model
 class User(Base):
-    __tablename__ = "user"
+    __tablename__ = "users"
     
     id = Column(Integer, primary_key=True)
     username = Column(String, nullable=False)
@@ -26,28 +26,28 @@ class User(Base):
 
 #creating a table many-to-many relationship between items and bids
 item_bid_table = Table('item_bid_association', Base.metadata,
-    Column('item_id', Integer, ForeignKey('item.id')),
-    Column('bid_id', Integer, ForeignKey('bid.id'))
+    Column('item_id', Integer, ForeignKey('items.id')),
+    Column('bid_id', Integer, ForeignKey('bids.id'))
 )
 
 class Item(Base):
-    __tablename__ = "item"
+    __tablename__ = "items"
 
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
     description = Column(String)
     start_time = Column(DateTime, default=datetime.utcnow)
 #one-to-many relationship with User
-    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     
 #creating a bid model
 class Bid(Base):
-    __tablename__ = "bid"
+    __tablename__ = "bids"
     
     id = Column(Integer, primary_key=True)
     price = Column(Float, nullable=False)
 #one-to-many relationship with User
-    bid_id = Column(Integer, ForeignKey('user.id'), nullable=False)
+    bid_id = Column(Integer, ForeignKey('users.id'), nullable=False)
 #many-to-many relationship with Item
     bids = relationship("Bid", secondary="item_bid_association",
                             backref="items")
