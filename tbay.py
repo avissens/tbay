@@ -41,7 +41,8 @@ class Bid(Base):
     bidder_id = Column(Integer, ForeignKey('users.id'), nullable=False)
 #one-to-many relationship with Item
     action_item_id = Column(Integer, ForeignKey('items.id'), nullable=False)
-    
+
+#cearing a table
 Base.metadata.create_all(engine)
 
 #creating instances for User
@@ -61,4 +62,5 @@ session.add_all([user1, user2, user3, item1, bid1, bid2])
 session.commit()
 
 #return the highest bid
-print("The highest bid is:", session.query(Bid.price).order_by(Bid.price.desc()).first())
+highest_bid = session.query(Bid.price).order_by(Bid.price.desc()).first()
+print("The highest bid is: $" + str(highest_bid[0]))
