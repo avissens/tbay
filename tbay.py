@@ -61,4 +61,4 @@ session.add_all([user1, user2, user3, item1, bid1, bid2])
 session.commit()
 
 #return the highest bid
-print(session.query(Bid.price).order_by(Bid.price.desc()).first())
+print("The highest bid is:", session.query(Bid.price).order_by(Bid.price.desc()).first())
