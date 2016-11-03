@@ -19,6 +19,11 @@ class User(Base):
     items = relationship("Item", backref="owner")
     bids = relationship("Bid", backref="bidder")
 
+#creating a table many-to-many relationship between items and bids
+item_bid_table = Table('item_bid_association', Base.metadata,
+    Column('item_id', Integer, ForeignKey('items.id')),
+    Column('bid_id', Integer, ForeignKey('bids.id'))
+)
 #creating an item model
 class Item(Base):
     __tablename__ = "items"
@@ -28,34 +33,18 @@ class Item(Base):
     description = Column(String)
     start_time = Column(DateTime, default=datetime.utcnow)
 #one-to-many relationship with User
-    owner_id = Column(Integer, ForeignKey('users.id'), nullable=False)
-#one-to-many relationship with Bid
-    bids = relationship("Bid", backref="auction_item")
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     
 #creating a bid model
 class Bid(Base):
     __tablename__ = "bids"
+    
     id = Column(Integer, primary_key=True)
     price = Column(Float, nullable=False)
 #one-to-many relationship with User
-    bidder_id = Column(Integer, ForeignKey('users.id'), nullable=False)
-#one-to-many relationship with Item
-    action_item_id = Column(Integer, ForeignKey('items.id'), nullable=False)
+    bid_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+#many-to-many relationship with Item
+    bids = relationship("Bid", secondary="item_bid_association",
+                            backref="items")
     
 Base.metadata.create_all(engine)
-
-#creating instances for User
-user1 = User(username = "anna", password = "lalalala")
-user2 = User(username = "ruben", password = "lolololo")
-user3 = User(username = "max", password = "lulululu")
-
-#creating instances for Item
-item1 = Item(name = "baseball", description = "red", start_time = "2016-11-1 12:50:00", owner_id = user1)
-
-#creating instances for Bid
-bid1 = Bid(price = "27.50", bidder_id = user2)
-bid2 = Bid(price = "37.50", bidder_id = user3)
-
-#add and commit all instances
-session.add_all([user1, user2, user3, item1, bid1, bid2])
-session.commit()
